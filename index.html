@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ตรีโกณมิติสนุกคิด ม.3 – กฎมือซ้าย</title>
+<link href="https://fonts.googleapis.com/css2?family=Mali:wght@500;700&family=Sarabun:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#3b2f63;--pink:#ff6fa5;--blue:#3fa9f5;--sun:#ffc93c;--mint:#3ed6a5;--violet:#8b6cf0;--bg1:#fff3c9;--bg2:#ffd9ec;--card:#ffffff;--shade:rgba(80,50,140,.28)}
+*{box-sizing:border-box}
+body{margin:0;font-family:'Mali','Sarabun','Tahoma',sans-serif;color:var(--ink);background:radial-gradient(rgba(255,255,255,.5) 3px,transparent 4px) 0 0/38px 38px,linear-gradient(160deg,#ffe033 0%,#ff7eb6 45%,#4fc3ff 100%) fixed;min-height:100vh;overflow-x:hidden}
+.blob{position:fixed;font-size:46px;opacity:.6;animation:fl 7s ease-in-out infinite;pointer-events:none;z-index:0}
+@keyframes fl{50%{transform:translateY(-22px) rotate(12deg)}}
+@media(prefers-reduced-motion:reduce){.blob{animation:none}}
+main{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:18px 14px 60px}
+h1{font-size:clamp(30px,6vw,52px);text-align:center;margin:10px 0 4px;color:#fff;-webkit-text-stroke:2px var(--violet);paint-order:stroke fill;text-shadow:0 2px 0 #6a4fd0,0 4px 0 #5b41bd,0 6px 0 #4c35a6,0 10px 14px var(--shade)}
+.sub{text-align:center;font-size:18px;margin:0 0 18px}
+.obj{background:#fff8;border:3px dashed var(--violet);border-radius:22px;padding:10px 16px;margin-bottom:22px;font-size:16px}
+section{background:var(--card);border:4px solid var(--ink);border-radius:28px;padding:18px;margin:26px 0;box-shadow:0 10px 0 var(--ink),0 22px 30px var(--shade)}
+h2{margin:0 0 10px;font-size:24px}
+h2 span{display:inline-block;background:var(--sun);border:3px solid var(--ink);border-radius:14px;padding:0 12px;margin-right:8px;box-shadow:0 4px 0 var(--ink);transform:rotate(-4deg)}
+.grid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:center}
+@media(max-width:760px){.grid{grid-template-columns:1fr}}
+canvas,svg.hand{width:100%;height:auto;display:block;background:linear-gradient(#e9f7ff,#fffbe8);border:3px solid var(--ink);border-radius:20px}
+.ctl{background:#f4efff;border:3px solid var(--violet);border-radius:18px;padding:10px 14px;margin:8px 0}
+.ctl label{display:flex;justify-content:space-between;font-weight:700;font-size:17px}
+input[type=range]{width:100%;height:30px;accent-color:var(--pink)}
+.res{background:#fff;border:3px solid var(--ink);border-radius:18px;padding:10px 14px;margin:8px 0;font-size:17px;line-height:1.7;box-shadow:0 5px 0 var(--ink)}
+.res b.o{color:#e0407f}.res b.a{color:#1b86d6}.res b.h{color:#d98b00}
+.tag{display:inline-block;border-radius:12px;padding:0 10px;color:#fff;font-weight:700}
+.big{font-size:24px;font-weight:700;color:var(--violet)}
+.tip{background:#e7fff6;border:3px solid var(--mint);border-radius:16px;padding:8px 12px;margin-top:8px;font-size:15px}
+.q{background:#fffaf0;border:3px solid var(--ink);border-radius:20px;padding:10px 14px;margin:12px 0}
+.q p{margin:0 0 6px;font-weight:700;font-size:17px}
+.q label{display:block;padding:5px 10px;margin:4px 0;border:2px solid #cdbff7;border-radius:12px;cursor:pointer;background:#fff}
+.q label:hover{background:#f1eaff}
+.q .ok{background:#c9f7e3!important;border-color:var(--mint)}
+.q .no{background:#ffd3e1!important;border-color:var(--pink)}
+.ex{display:none;margin-top:6px;padding:8px 12px;border-radius:12px;background:#fff3b8;font-size:15px}
+.btn{font-family:inherit;font-size:19px;font-weight:700;color:#fff;background:var(--pink);border:3px solid var(--ink);border-radius:18px;padding:10px 24px;cursor:pointer;box-shadow:0 6px 0 var(--ink);margin:6px 8px 6px 0}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--ink)}
+.btn.b2{background:var(--blue)}
+.score{font-size:24px;font-weight:700;text-align:center;margin-top:10px}
+:focus-visible{outline:4px solid var(--sun);outline-offset:2px}
+#auth{position:fixed;inset:0;z-index:50;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(59,47,99,.85)}
+.ab{background:#fff;border:4px solid var(--ink);border-radius:28px;padding:22px;width:min(380px,100%);box-shadow:0 10px 0 var(--ink)}
+.ab h2{margin:0 0 6px}.ab p{margin:0 0 8px;font-size:15px}.ab label{display:block;font-weight:700;margin:8px 0}
+.ab input{display:block;width:100%;font:inherit;font-size:18px;padding:8px 12px;margin-top:4px;border:3px solid var(--violet);border-radius:14px}
+.am{min-height:24px;color:#d6245f;font-weight:700;font-size:15px}
+#who{display:none;position:sticky;top:0;z-index:5;padding:8px 14px;align-items:center;justify-content:flex-end;gap:10px;flex-wrap:wrap;background:rgba(255,255,255,.88);border-bottom:3px solid var(--ink)}
+.btn.sm{font-size:15px;padding:5px 14px;margin:0;box-shadow:0 4px 0 var(--ink);text-decoration:none;display:inline-block}
+.btn.lvb{background:#fff;color:var(--ink)}.btn.lvb.on{background:var(--sun)}
+.lg{overflow-x:auto;margin-top:10px}table{border-collapse:collapse;width:100%;font-size:14px}th,td{border:2px solid #cdbff7;padding:4px 8px;text-align:left;white-space:nowrap}th{background:#f1eaff}
+
+#nav{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:0 0 6px;scroll-margin-top:64px}
+.tabb{font-family:inherit;font-size:17px;font-weight:700;color:var(--ink);background:#fff;border:3px solid var(--ink);border-radius:18px;padding:8px 16px;cursor:pointer;box-shadow:0 5px 0 var(--ink)}
+.tabb.on{background:var(--sun);transform:translateY(2px);box-shadow:0 3px 0 var(--ink)}
+.tabb:active{transform:translateY(4px);box-shadow:0 1px 0 var(--ink)}
+.page{display:none}.page.on{display:block;animation:pgi .35s ease}
+@keyframes pgi{from{opacity:0;transform:translateY(12px)}}
+.pager{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:10px 0 0}
+.gq{text-align:center;font-size:clamp(20px,4.6vw,26px);line-height:1.4}
+.gq.ask{font-size:clamp(28px,7.5vw,42px);background:#3b2f63;color:#fff;border-color:var(--sun);box-shadow:0 5px 0 var(--sun)}
+.gq small{font-size:.5em;opacity:.85;font-weight:500}
+#gm{touch-action:none;cursor:pointer;user-select:none;-webkit-user-select:none}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin-top:14px}
+.cards .res{margin:0;font-size:16px}
+footer.cr{position:relative;z-index:1;text-align:center;font-weight:800;font-size:15px;color:var(--ink);padding:10px 14px 22px;max-width:980px;margin:-40px auto 0}footer.cr span{display:inline-block;background:#fff;border:3px solid var(--ink);border-radius:999px;padding:6px 18px;box-shadow:0 4px 0 var(--ink)}.ab .cr2{display:block;margin-top:10px;font-weight:800;text-align:center}
+#camBox{display:none;position:fixed;right:10px;bottom:10px;z-index:7;width:min(200px,38vw);background:#fff;border:3px solid var(--ink);border-radius:16px;padding:5px;box-shadow:0 5px 0 var(--ink)}
+.cw{position:relative;line-height:0}.cw video,.cw canvas{width:100%;border-radius:10px;transform:scaleX(-1)}.cw canvas{position:absolute;inset:0;height:100%;background:none;border:0}
+#cs{font-size:12px;font-weight:700;line-height:1.3;margin-top:4px}
+</style>
+</head>
+<body>
+<div class="blob" style="top:8%;left:3%">⭐</div><div class="blob" style="top:30%;right:4%;animation-delay:1s">📐</div><div class="blob" style="top:62%;left:5%;animation-delay:2s">🌈</div><div class="blob" style="top:85%;right:8%;animation-delay:3s">✏️</div>
+<div id="auth" role="dialog" aria-modal="true" aria-labelledby="at"><div class="ab">
+<h2 id="at">🔐 เข้าสู่ระบบ</h2><p>ล็อกอินก่อนเล่น เพื่อบันทึกคะแนนสูงสุดและประวัติการใช้งานของเธอ</p>
+<label>ชื่อผู้ใช้<input id="au" autocomplete="username" maxlength="20"></label>
+<label>รหัสผ่าน<input id="ap" type="password" autocomplete="current-password"></label>
+<div id="am" class="am" role="alert"></div>
+<button class="btn" id="bl">เข้าสู่ระบบ</button><button class="btn b2" id="br">สมัครสมาชิก</button>
+<small>ข้อมูลบัญชีและคะแนนเก็บไว้ในเบราว์เซอร์เครื่องนี้เท่านั้น</small><small class="cr2">📚 สื่อการเรียนรู้คณิตศาสตร์ โดย คุณครูสุจิรา สังข์แก้ว</small></div></div>
+<div id="who"><span>👤 <b id="un"></b></span><button class="btn b2 sm" id="hb" aria-pressed="false">🖐️ ควบคุมด้วยมือ</button><button class="btn b2 sm" id="lgb">📋 บันทึกการใช้งาน</button><button class="btn sm" id="lo">ออกจากระบบ</button></div>
+<div id="camBox"><div class="cw"><video id="cv" playsinline muted></video><canvas id="co"></canvas></div><div id="cs" aria-live="polite"></div><button class="btn b2 sm" id="hf" style="font-size:11px;padding:2px 8px;margin-top:4px;box-shadow:0 3px 0 var(--ink)">🔄 สลับฝ่ามือ/หลังมือ</button></div>
+<main>
+<h1>📐 ตรีโกณมิติสนุกคิด ✋</h1>
+<p class="sub">สำหรับนักเรียนชั้น ม.3 · เรียนรู้กฎมือซ้าย หาค่ามุม และแก้ปัญหาชีวิตจริง</p>
+<nav id="nav" aria-label="เมนูหน้า"><button class="tabb on" data-p="1">1 📚 ความรู้</button><button class="tabb" data-p="2">2 🏙️ ชีวิตประจำวัน</button><button class="tabb" data-p="3">3 🎮 เกม</button><button class="tabb" data-p="4">4 📝 แบบทดสอบ</button></nav>
+<div class="obj">🎯 <b>จุดประสงค์:</b> เข้าใจและใช้กฎมือซ้ายหาค่า sin cos tan ของมุมพิเศษ (0°, 30°, 45°, 60°, 90°) หาค่ามุมต่าง ๆ และนำไปแก้ปัญหาในชีวิตจริงได้</div>
+
+<div class="page on" id="pg1">
+<!-- 1 -->
+<section>
+<h2><span>1</span>กฎมือซ้าย ✋</h2>
+<div class="grid">
+<svg class="hand" id="hand" viewBox="0 0 350 300" role="img" aria-label="มือซ้าย"></svg>
+<div>
+<div class="ctl"><label>เลือกมุม θ <span id="angL" class="big">30°</span></label><input type="range" id="hs" min="0" max="90" step="1" value="30" list="tk" aria-label="เลือกมุม"><datalist id="tk"><option value="0"><option value="30"><option value="45"><option value="60"><option value="90"></datalist></div>
+<div class="res" id="hres"></div><div class="res" id="hmode" style="display:none"></div>
+</div>
+</div>
+<div class="tip">💡 <b>วิธีใช้:</b> หงายมือซ้ายหันฝ่ามือเข้าหาตัว นิ้วโป้ง=0° นิ้วชี้=30° นิ้วกลาง=45° นิ้วนาง=60° นิ้วก้อย=90°<br>
+<b style="color:#1b86d6">sin θ</b> = √(จำนวนนิ้วทางขวาของนิ้วที่เลือก ฝั่งนิ้วโป้ง) ÷ 2 &nbsp;|&nbsp; <b style="color:#e0407f">cos θ</b> = √(จำนวนนิ้วทางซ้าย ฝั่งนิ้วก้อย) ÷ 2 &nbsp;|&nbsp; tan θ = sin θ ÷ cos θ<br>
+ลองกดที่นิ้วหรือเลื่อนแถบ 0°–90° แล้วดูนิ้วสีฟ้า (ขวา = sin) และสีชมพู (ซ้าย = cos) นะ<br>📷 <b>ใช้มือจริงกับกล้อง (MediaPipe):</b> กด “🖐️ ควบคุมด้วยมือ” → <b>หันฝ่ามือซ้ายเข้าหาตัว</b> · <b>มือตั้งตรง</b> แล้ว<b>พับนิ้ว</b>ที่ต้องการ (โป้ง=0° ชี้=30° กลาง=45° นาง=60° ก้อย=90°) เพื่อหา <b>sin / cos</b> (นับนิ้วฝั่งโป้ง = sin, ฝั่งก้อย = cos) · ถ้าจะหา <b>tan</b> ให้<b>วางมือนอน</b>แล้วพับนิ้วตามองศาเดิม — วิดีโอประมวลผลในเครื่อง ไม่ถูกส่งออกไปไหน</div>
+</section>
+
+<!-- 2 -->
+<section>
+<h2><span>2</span>สามเหลี่ยมมุมฉาก 3 มิติ 🔺</h2>
+<div class="grid">
+<div><canvas id="tri" width="460" height="300"></canvas></div>
+<div>
+<div class="ctl"><label>มุม θ <span id="tL" class="big"></span></label><input type="range" id="th" min="0" max="90" value="35"></div>
+<div class="ctl"><label>ด้านตรงข้ามมุมฉาก (c) <span id="cL" class="big"></span></label><input type="range" id="hy" min="4" max="10" step="0.5" value="8"></div>
+<div class="res" id="tres"></div>
+</div>
+</div>
+<div style="margin-top:14px"><canvas id="gr" width="460" height="190"></canvas></div>
+<div class="tip">💡 sin = <b style="color:#e0407f">ตรงข้าม</b>/<b style="color:#d98b00">ฉาก</b> · cos = <b style="color:#1b86d6">ชิดมุม</b>/<b style="color:#d98b00">ฉาก</b> · tan = <b style="color:#e0407f">ตรงข้าม</b>/<b style="color:#1b86d6">ชิดมุม</b> — ลองเลื่อน θ ไปที่ 30°, 45°, 60° แล้วเทียบกับมือซ้ายดู!</div>
+</section>
+
+<div class="pager"><span></span><button class="btn go" data-p="2">ตัวอย่างในชีวิตประจำวัน ▶</button></div>
+</div>
+<div class="page" id="pg2">
+<!-- 3 -->
+<section>
+<h2><span>1</span>วัดความสูงตึกด้วยมุมเงย 🏢</h2>
+<div class="grid">
+<div><canvas id="sc" width="460" height="260"></canvas></div>
+<div>
+<div class="ctl"><label>ยืนห่างตึก d <span id="dL" class="big"></span></label><input type="range" id="dd" min="5" max="40" value="20"></div>
+<div class="ctl"><label>มุมเงย θ <span id="eL" class="big"></span></label><input type="range" id="ee" min="5" max="80" value="40"></div>
+<div class="res" id="sres"></div>
+</div>
+</div>
+<div class="tip">💡 ตึกสูง h = d × tan θ (ไม่คิดความสูงของสายตา) ลองให้ θ = 45° จะได้ tan 45° = 1 ความสูงเท่ากับระยะห่างพอดี!</div>
+</section>
+
+
+<section>
+<h2><span>2</span>บันไดพิงกำแพง 🪜</h2>
+<div class="grid">
+<div><canvas id="ld" width="460" height="260"></canvas></div>
+<div>
+<div class="ctl"><label>ความยาวบันได L <span id="lLL" class="big"></span></label><input type="range" id="ll" min="3" max="10" step="0.5" value="6"></div>
+<div class="ctl"><label>มุมที่บันไดทำกับพื้น θ <span id="laL" class="big"></span></label><input type="range" id="la" min="30" max="80" value="60"></div>
+<div class="res" id="lres"></div>
+</div>
+</div>
+<div class="tip">💡 บันไดคือ <b style="color:#d98b00">ฉาก</b> · ความสูงที่บันไดแตะกำแพง = L × sin θ · เท้าบันไดห่างกำแพง = L × cos θ — ลองตั้งมุม 60° แล้วดูว่า sin 60° = √3/2 ใช้ได้จริงไหม!</div>
+</section>
+<section>
+<h2><span>3</span>เจอตรีโกณมิติได้อีกที่ไหน? 🌍</h2>
+<div class="cards">
+<div class="res">🛝 <b>สไลเดอร์</b><br>ทางลื่นยาว 4 ม. ทำมุม 30° กับพื้น<br>สูง = 4 × sin 30° = 4 × ½ = <b>2 ม.</b></div>
+<div class="res">🔦 <b>เงาเสาธง</b><br>เงายาว 10 ม. แสงอาทิตย์ทำมุม 45°<br>สูง = 10 × tan 45° = <b>10 ม.</b></div>
+<div class="res">🪁 <b>ว่าวบนท้องฟ้า</b><br>สายป่านยาว 50 ม. ทำมุม 30° กับพื้น<br>สูง = 50 × sin 30° = <b>25 ม.</b></div>
+<div class="res">♿ <b>ทางลาดรถเข็น</b><br>ทางลาดยาว 6 ม. ทำมุม 30° กับพื้น<br>ระยะแนวราบ = 6 × cos 30° = <b>3√3 ≈ 5.2 ม.</b></div>
+</div>
+</section>
+<div class="pager"><button class="btn b2 go" data-p="1">◀ ความรู้</button><button class="btn go" data-p="3">เล่นเกม ▶</button></div>
+</div>
+<div class="page" id="pg3">
+<!-- 4 -->
+<section>
+<h2><span>🎮</span>เกมวิ่งหลบสิ่งกีดขวาง 🏃💨</h2>
+<div style="text-align:center"><button class="btn lvb" data-l="e" aria-pressed="false">🌱 ง่าย</button><button class="btn lvb on" data-l="m" aria-pressed="true">🌟 กลาง</button><button class="btn lvb" data-l="h" aria-pressed="false">🔥 ยาก</button><button class="btn b2 sm" id="snd" aria-pressed="true">🔊 เสียง</button> <button class="btn b2 sm" id="bgm" aria-pressed="false">🎵 เพลง</button></div>
+<div class="res gq" id="gq" aria-live="polite">ระดับกลาง · กด “เริ่มเกม” แล้ววิ่งหลบ จากนั้นหยุดตอบคำถาม!</div>
+<canvas id="gm" width="460" height="380" aria-label="เกมวิ่งหลบสิ่งกีดขวาง"></canvas>
+<div style="text-align:center;margin-top:8px"><button class="btn b2" id="gbL">◀ ซ้าย</button><button class="btn" id="gbS">▶ เริ่มเกม</button><button class="btn b2" id="gbR">ขวา ▶</button><br><button class="btn" id="gbC" style="background:var(--mint)" disabled>✅ ยืนยันคำตอบ</button><button class="btn" id="gbX" style="background:#ff4d7d" disabled>⏹ หยุดเกม</button></div>
+<div class="res" id="hsb"></div>
+<div class="tip">💡 <b>วิธีเล่น:</b> <b>① ช่วงวิ่ง</b> ใช้นิ้ว<b>แตะหรือลากบนจอ</b> (หรือปุ่ม ← → / A D) เลื่อนตัวการ์ตูนหลบก้อนม่วงเขี้ยวแหลม · <b>② ช่วงตอบคำถาม</b> การ์ตูนจะ<b>หยุดวิ่ง</b> โจทย์ขึ้นตัวใหญ่ มีเวลาคิดเต็มที่ ให้แตะการ์ดคำตอบ (แตะครั้งแรก=เลือก แตะซ้ำ=ยืนยัน) หรือกดปุ่ม ✅ ยืนยัน · ถูก +10 คะแนน · ชนหรือตอบผิด/หมดเวลาเสีย ❤️ 1 ดวง · มี 10 ด่าน<br><b>ระดับ:</b> 🌱 ง่าย (30 วิ/ข้อ) = ค่า sin/cos พื้นฐาน หัวใจ 4 ดวง · 🌟 กลาง (25 วิ/ข้อ) = sin cos tan + โจทย์ชีวิตจริง · 🔥 ยาก (40 วิ/ข้อ) = หาค่ารวม หามุมย้อนกลับ โจทย์หลายขั้น · คะแนนเท่ากันใครใช้เวลาน้อยกว่าอยู่อันดับสูงกว่า<br>🖐️ <b>เล่นด้วยมือ:</b> กด “ควบคุมด้วยมือ” → <b>เลื่อนมือซ้าย-ขวา</b>หน้ากล้องเพื่อเปลี่ยนเลน · ตอนตอบคำถาม <b>จีบนิ้วโป้งกับนิ้วชี้</b>เพื่อยืนยันการ์ด</div>
+</section>
+
+<div class="pager"><button class="btn b2 go" data-p="2">◀ ชีวิตประจำวัน</button><button class="btn go" data-p="4">แบบทดสอบ ▶</button></div>
+</div>
+<div class="page" id="pg4">
+<!-- 5 -->
+<section>
+<h2><span>📝</span>แบบทดสอบท้ายกิจกรรม 📝</h2>
+<div id="quiz"></div>
+<button class="btn" id="sub">✅ ตรวจคำตอบ</button><button class="btn b2" id="rst">🔄 ทำใหม่</button>
+<div class="score" id="score"></div>
+</section>
+<section id="logsec">
+<h2><span>📋</span>บันทึกการใช้งาน</h2>
+<button class="btn b2 sm" id="lcsv">⬇ ดาวน์โหลด CSV</button> <button class="btn sm" id="lclr">🗑 ล้างบันทึกของฉัน</button>
+<div class="lg" id="lgt"></div>
+</section>
+<div class="pager"><button class="btn b2 go" data-p="3">◀ เล่นเกม</button><span></span></div>
+</div>
+</main>
+<footer class="cr"><span>📚 สื่อการเรียนรู้คณิตศาสตร์ โดย คุณครูสุจิรา สังข์แก้ว</span></footer>
+
+<script>
+const $=i=>document.getElementById(i),rad=d=>d*Math.PI/180;
+/* ---------- 0. Login & usage log ---------- */
+const LS={get:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+const esc=x=>String(x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const fmt=x=>{x=Math.floor(x);return(x/60|0)+':'+String(x%60).padStart(2,'0')};
+const EV={register:'สมัครสมาชิก',login:'เข้าสู่ระบบ',login_fail:'ล็อกอินไม่สำเร็จ',logout:'ออกจากระบบ',game_start:'เริ่มเกม',game_end:'จบเกม',quiz:'ส่งแบบทดสอบ',hand:'ควบคุมด้วยมือ'};
+let U=LS.get('trig_session',null),t0=Date.now();
+function log(ev,det='',u=U){const L=LS.get('trig_logs',[]);L.push({t:Date.now(),u:u||'-',e:ev,d:det});LS.set('trig_logs',L.slice(-500));if(U)showLog()}
+function showLog(){const L=LS.get('trig_logs',[]).filter(x=>x.u==U).reverse().slice(0,30);
+  $('lgt').innerHTML=L.length?`<table><tr><th>เวลา</th><th>เหตุการณ์</th><th>รายละเอียด</th></tr>${L.map(x=>`<tr><td>${new Date(x.t).toLocaleString('th-TH')}</td><td>${EV[x.e]||x.e}</td><td>${esc(x.d)}</td></tr>`).join('')}</table>`:'ยังไม่มีบันทึก'}
+async function hash(u,p){const q=u+'|'+p+'|trigM3';try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(q));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){let h=5381;for(const c of q)h=((h<<5)+h+c.charCodeAt(0))|0;return'x'+h}}
+function enter(u){U=u;LS.set('trig_session',u);t0=Date.now();$('auth').style.display='none';$('who').style.display='flex';$('un').textContent=u;$('ap').value='';$('am').textContent='';showHS();showLog()}
+async function doAuth(reg){
+  const u=$('au').value.trim(),p=$('ap').value,m=$('am'),us=LS.get('trig_users',{});
+  if(!/^[A-Za-z0-9ก-๙_.-]{3,20}$/.test(u)){m.textContent='ชื่อผู้ใช้ 3–20 ตัว ใช้ตัวอักษร ตัวเลข _ . - ได้';return}
+  if(p.length<4){m.textContent='รหัสผ่านต้องมีอย่างน้อย 4 ตัว';return}
+  const h=await hash(u,p);
+  if(reg){if(us[u]){m.textContent='ชื่อนี้มีคนใช้แล้ว ลองชื่ออื่นนะ';return}us[u]={h,c:Date.now()};LS.set('trig_users',us);enter(u);log('register')}
+  else{if(!us[u]||us[u].h!=h){m.textContent='ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง';log('login_fail','',u);return}enter(u);log('login')}
+}
+function logout(){stopHand();log('logout','ใช้งาน '+fmt((Date.now()-t0)/1000));U=null;LS.set('trig_session',null);g=null;$('gbS').textContent='▶ เริ่มเกม';gqSet('กด “เริ่มเกม” แล้ววิ่งหลบ จากนั้นหยุดตอบคำถาม!');$('gbC').disabled=true;$('ap').value='';$('auth').style.display='flex';$('who').style.display='none';$('au').focus()}
+$('bl').onclick=()=>doAuth(0);$('br').onclick=()=>doAuth(1);$('lo').onclick=logout;
+['au','ap'].forEach(i=>$(i).addEventListener('keydown',e=>{if(e.key=='Enter')doAuth(0)}));
+$('lclr').onclick=()=>{if(confirm('ล้างบันทึกการใช้งานของเธอทั้งหมด?')){LS.set('trig_logs',LS.get('trig_logs',[]).filter(x=>x.u!=U));showLog()}};
+$('lcsv').onclick=()=>{const L=LS.get('trig_logs',[]).filter(x=>x.u==U),q=v=>'"'+String(v).replace(/"/g,'""')+'"',csv=['เวลา,ผู้ใช้,เหตุการณ์,รายละเอียด',...L.map(x=>[new Date(x.t).toISOString(),x.u,EV[x.e]||x.e,x.d].map(q).join(','))].join('\r\n'),a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['\ufeff'+csv],{type:'text/csv'}));a.download='trig-log-'+U+'.csv';a.click()};
+/* ---------- 1. Left hand ---------- */
+function sFace(x,y,r){const f=(a,b)=>a*r+b;return `<ellipse cx="${x-r*.45}" cy="${y}" rx="${r*.28}" ry="${r*.36}" fill="#3b2f63"/><ellipse cx="${x+r*.45}" cy="${y}" rx="${r*.28}" ry="${r*.36}" fill="#3b2f63"/>
+<circle cx="${x-r*.53}" cy="${y-r*.12}" r="${r*.12}" fill="#fff"/><circle cx="${x+r*.37}" cy="${y-r*.12}" r="${r*.12}" fill="#fff"/><circle cx="${x-r*.38}" cy="${y+r*.13}" r="${r*.05}" fill="#fff"/><circle cx="${x+r*.52}" cy="${y+r*.13}" r="${r*.05}" fill="#fff"/>
+<ellipse cx="${x-r*.85}" cy="${y+r*.42}" rx="${r*.2}" ry="${r*.12}" fill="#ff6fa5" opacity=".55"/><ellipse cx="${x+r*.85}" cy="${y+r*.42}" rx="${r*.2}" ry="${r*.12}" fill="#ff6fa5" opacity=".55"/>
+<path d="M${x-r*.18} ${y+r*.4}Q${x} ${y+r*.65} ${x+r*.18} ${y+r*.4}" stroke="#3b2f63" stroke-width="3" fill="none" stroke-linecap="round"/>`}
+const angs=[90,60,45,30,0],sinT=['1','√3/2','√2/2','1/2','0'],cosT=['0','1/2','√2/2','√3/2','1'],tanT=['ไม่นิยาม','√3','1','√3/3','0'];
+const fing=[{x:60,h:95,n:'ก้อย'},{x:122,h:125,n:'นาง'},{x:184,h:140,n:'กลาง'},{x:246,h:125,n:'ชี้'},{x:306,h:88,n:'โป้ง'}];
+function hand(k){
+  let s='<rect x="30" y="150" width="300" height="105" rx="45" fill="#ffd9b8" stroke="#3b2f63" stroke-width="4"/>';
+  fing.forEach((f,i)=>{
+    const c=k<0?'#ffe9d2':i==k?'#ffd43b':i<k?'#ffa3c4':'#7cc8ff';
+    s+=`<g style="cursor:pointer" onclick="pick(${i})"><rect x="${f.x-24}" y="${160-f.h}" width="48" height="${f.h+14}" rx="24" fill="${c}" stroke="#3b2f63" stroke-width="4"/>
+    <text x="${f.x}" y="${160-f.h+32}" text-anchor="middle" font-size="16" font-weight="700" fill="#3b2f63">${angs[i]}°</text>
+    <text x="${f.x}" y="${160-f.h+52}" text-anchor="middle" font-size="12" fill="#3b2f63">${f.n}</text></g>`;
+  });
+  s+=sFace(175,203,34);
+  s+=`<text x="175" y="282" text-anchor="middle" font-size="16" font-weight="700" fill="#3b2f63">${k<0?'ลองเลื่อนให้ตรงมุมพิเศษนะ':'ซ้าย '+k+' นิ้ว 🌸 cos | ขวา '+(4-k)+' นิ้ว 🔵 sin'}</text>`;
+  $('hand').innerHTML=s;
+}
+function pick(i){$('hs').value=angs[i];upH()}
+function upH(){
+  const a=+$('hs').value,k=angs.indexOf(a),r=rad(a);hand(k);$('angL').textContent=a+'°';
+  if(k<0){$('hres').innerHTML=`<span class="tag" style="background:#3fa9f5">sin</span> sin ${a}° ≈ <b>${Math.sin(r).toFixed(3)}</b><br><span class="tag" style="background:#ff6fa5">cos</span> cos ${a}° ≈ <b>${Math.cos(r).toFixed(3)}</b><br><span class="tag" style="background:#8b6cf0">tan</span> tan ${a}° ≈ <b>${Math.tan(r).toFixed(3)}</b><br>🔎 ${a}° ไม่ใช่มุมพิเศษ กฎมือซ้ายใช้กับ 0°, 30°, 45°, 60°, 90° — กดที่นิ้วหรือเลื่อนให้ตรงดูนะ`;return}
+  $('hres').innerHTML=`<span class="tag" style="background:#3fa9f5">sin</span> sin ${a}° = √${4-k}/2 = <b>${sinT[k]}</b><br>
+  <span class="tag" style="background:#ff6fa5">cos</span> cos ${a}° = √${k}/2 = <b>${cosT[k]}</b><br>
+  <span class="tag" style="background:#8b6cf0">tan</span> tan ${a}° = ${sinT[k]} ÷ ${cosT[k]} = <b>${tanT[k]}</b><br>
+  <small>ค่าจริง ≈ sin ${Math.sin(r).toFixed(3)}, cos ${Math.cos(r).toFixed(3)}</small>`;
+}
+$('hs').oninput=upH;
+
+/* ---------- 2. Triangle ---------- */
+const tc=$('tri').getContext('2d'),gc=$('gr').getContext('2d');
+function poly(c,p,fill,stroke){c.beginPath();p.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));c.closePath();if(fill){c.fillStyle=fill;c.fill()}if(stroke){c.strokeStyle=stroke;c.lineWidth=3;c.lineJoin='round';c.stroke()}}
+function txt(c,t,x,y,col,sz=16){c.font=`700 ${sz}px Mali,Sarabun,sans-serif`;c.fillStyle=col;c.textAlign='center';c.fillText(t,x,y)}
+function face(X,x,y,r){X.fillStyle='#3b2f63';[-1,1].forEach(t=>{X.beginPath();X.ellipse(x+t*r*.45,y,r*.28,r*.36,0,0,7);X.fill()});
+X.fillStyle='#fff';[-1,1].forEach(t=>{X.beginPath();X.arc(x+t*r*.45-r*.08,y-r*.12,r*.12,0,7);X.fill();X.beginPath();X.arc(x+t*r*.45+r*.07,y+r*.13,r*.05,0,7);X.fill()});
+X.fillStyle='rgba(255,90,140,.55)';[-1,1].forEach(t=>{X.beginPath();X.ellipse(x+t*r*.85,y+r*.42,r*.2,r*.12,0,0,7);X.fill()});
+X.strokeStyle='#3b2f63';X.lineWidth=Math.max(2,r*.1);X.lineCap='round';X.beginPath();X.moveTo(x-r*.18,y+r*.4);X.quadraticCurveTo(x,y+r*.65,x+r*.18,y+r*.4);X.stroke();X.lineCap='butt'}
+function upT(){
+  const d=+$('th').value,c=+$('hy').value,t=rad(d),opp=c*Math.sin(t),adj=c*Math.cos(t),s=26;
+  $('tL').textContent=d+'°';$('cL').textContent=c;
+  const X=tc;X.clearRect(0,0,460,300);
+  const ax=60,ay=262,bx=ax+adj*s,by=ay,cx=bx,cy=ay-opp*s;
+  poly(X,[[ax+12,ay+12],[bx+12,by+12],[cx+12,cy+12]],'rgba(59,47,99,.35)');
+  const g=X.createLinearGradient(ax,cy,bx,ay);g.addColorStop(0,'#ffe27a');g.addColorStop(1,'#ff9ec4');
+  poly(X,[[ax,ay],[bx,by],[cx,cy]],g,'#3b2f63');
+  X.strokeStyle='#fff9';X.lineWidth=4;X.beginPath();X.moveTo(ax+14,ay-5);X.lineTo(cx-8,cy+18);X.stroke();
+  X.strokeStyle='#3b2f63';X.lineWidth=2.5;X.strokeRect(bx-16,by-16,16,16);
+  X.beginPath();X.arc(ax,ay,46,-t,0);X.stroke();
+  const fr=Math.min(opp,adj)*s*.28;if(fr>=9)face(X,(ax+bx+cx)/3,(ay+by+cy)/3+fr*.2,Math.min(fr,24));
+  txt(X,'θ',ax+62,ay-8,'#6a4fd0',20);
+  txt(X,'ชิดมุม '+adj.toFixed(2),(ax+bx)/2,ay+30,'#1b86d6');
+  X.save();X.translate(bx+22,(by+cy)/2);X.rotate(Math.PI/2);txt(X,'ตรงข้าม '+opp.toFixed(2),0,0,'#e0407f');X.restore();
+  X.save();X.translate((ax+cx)/2-14,(ay+cy)/2-14);X.rotate(-t);txt(X,'ฉาก '+c,0,0,'#d98b00');X.restore();
+  $('tres').innerHTML=`<b class="o">ตรงข้าม</b> = ${opp.toFixed(2)} · <b class="a">ชิดมุม</b> = ${adj.toFixed(2)} · <b class="h">ฉาก</b> = ${c}<br>
+  sin ${d}° = ตรงข้าม/ฉาก = <b>${(opp/c).toFixed(3)}</b><br>cos ${d}° = ชิดมุม/ฉาก = <b>${(adj/c).toFixed(3)}</b><br>tan ${d}° = ตรงข้าม/ชิดมุม = <b>${adj<1e-6?'ไม่นิยาม':(opp/adj).toFixed(3)}</b><br>
+  <small>หามุมย้อนกลับ: θ = sin⁻¹(${(opp/c).toFixed(3)}) = ${d}°</small>`;
+  // graph
+  const G=gc;G.clearRect(0,0,460,190);G.strokeStyle='#3b2f63';G.lineWidth=2;G.beginPath();G.moveTo(30,15);G.lineTo(30,165);G.lineTo(440,165);G.stroke();
+  const px=a=>30+a/90*400,py=v=>165-v*140;
+  [['#3fa9f5',Math.sin],['#ff6fa5',Math.cos]].forEach(([col,f])=>{G.strokeStyle=col;G.lineWidth=4;G.beginPath();for(let a=0;a<=90;a++){a?G.lineTo(px(a),py(f(rad(a)))):G.moveTo(px(a),py(f(rad(a))))}G.stroke();
+    G.fillStyle=col;G.beginPath();G.arc(px(d),py(f(t)),8,0,7);G.fill();G.strokeStyle='#3b2f63';G.lineWidth=2;G.stroke()});
+  G.setLineDash([5,5]);G.strokeStyle='#8b6cf0';G.beginPath();G.moveTo(px(d),165);G.lineTo(px(d),15);G.stroke();G.setLineDash([]);
+  txt(G,'sin θ',px(88)-6,py(1)+20,'#1b86d6',14);txt(G,'cos θ',70,py(1)+14,'#e0407f',14);
+  [0,30,45,60,90].forEach(a=>txt(G,a+'°',px(a),183,'#3b2f63',13));
+  txt(G,`θ=${d}°`,px(d),12,'#6a4fd0',14);
+}
+$('th').oninput=$('hy').oninput=upT;
+
+/* ---------- 3. Building scene ---------- */
+const sx=$('sc').getContext('2d');
+function upS(){
+  const d=+$('dd').value,e=+$('ee').value,h=d*Math.tan(rad(e));$('dL').textContent=d+' ม.';$('eL').textContent=e+'°';
+  const X=sx,gy=225,s=Math.min(280/d,160/h),px=40,bx=px+d*s,ty=gy-h*s;
+  X.clearRect(0,0,460,260);
+  X.fillStyle='#ffe27a';X.beginPath();X.arc(415,40,24,0,7);X.fill();X.strokeStyle='#3b2f63';X.lineWidth=3;X.stroke();face(X,415,41,20);
+  X.fillStyle='#8be28b';X.fillRect(0,gy,460,35);X.strokeStyle='#3b2f63';X.lineWidth=3;X.beginPath();X.moveTo(0,gy);X.lineTo(460,gy);X.stroke();
+  const w=40;poly(X,[[bx,gy],[bx+16,gy-10],[bx+16,ty-10],[bx,ty]],'#b68cf0','#3b2f63');poly(X,[[bx-w,gy],[bx,gy],[bx,ty],[bx-w,ty]],'#ff9ec4','#3b2f63');
+  poly(X,[[bx-w,ty],[bx,ty],[bx+16,ty-10],[bx-w+16,ty-10]],'#ffd9ec','#3b2f63');
+  const fc=gy-ty>=56;X.fillStyle='#fff7';for(let y=fc?ty+44:ty+10;y<gy-14;y+=22)for(let x=bx-w+7;x<bx-8;x+=15)X.fillRect(x,y,9,12);if(fc)face(X,bx-w/2,ty+24,15);
+  X.setLineDash([6,5]);X.strokeStyle='#e0407f';X.lineWidth=3;X.beginPath();X.moveTo(px,gy);X.lineTo(bx,ty);X.stroke();X.setLineDash([]);
+  X.strokeStyle='#3b2f63';X.lineWidth=2;X.beginPath();X.arc(px,gy,36,-rad(e),0);X.stroke();
+  X.lineWidth=2.5;X.fillStyle='#3fa9f5';X.fillRect(px-9,gy-17,18,17);X.strokeRect(px-9,gy-17,18,17);
+X.fillStyle='#ffd9b8';X.beginPath();X.arc(px,gy-30,14,0,7);X.fill();X.stroke();
+X.fillStyle='#7a4b2a';X.beginPath();X.arc(px,gy-33,14,Math.PI,0);X.fill();X.stroke();face(X,px,gy-28,12);
+  txt(X,'θ',px+50,gy-8,'#6a4fd0',16);txt(X,'d = '+d+' ม.',(px+bx)/2,gy+26,'#1b86d6',15);
+  txt(X,'h ≈ '+h.toFixed(1)+' ม.',Math.min(bx-w/2,400),Math.max(ty-18,16),'#d98b00',16);
+  $('sres').innerHTML=`tan θ = ตรงข้าม/ชิดมุม = h/d<br>h = d × tan ${e}°<br>h = ${d} × ${Math.tan(rad(e)).toFixed(3)}<br>ตึกสูงประมาณ <span class="big">${h.toFixed(1)} เมตร</span>`;
+}
+$('dd').oninput=$('ee').oninput=upS;
+
+/* ---------- 4. Runner game ---------- */
+const GC2=['#a9dcff','#ffc2dc','#ffe48a'],VAL=['0','1/2','√2/2','√3/2','1','√3','√3/3'],G2=$('gm').getContext('2d');
+const LV={e:{n:'ง่าย',life:4,v0:.30,dv:.012,tq:30},m:{n:'กลาง',life:3,v0:.38,dv:.02,tq:25},h:{n:'ยาก',life:3,v0:.46,dv:.026,tq:40}},RM=matchMedia('(prefers-reduced-motion:reduce)').matches;
+let pg=1,g=null,lt=0,lvl='m',P=[],AC=null,sndOn=true,bgmOn=false,bgmT=null,bi=0;
+const rr=(X,a,b,c,d,r)=>X.roundRect?X.roundRect(a,b,c,d,r):X.rect(a,b,c,d);
+/* sound */
+function ac(){if(!AC){const C=window.AudioContext||window.webkitAudioContext;if(C)AC=new C()}if(AC&&AC.state=='suspended')AC.resume();return AC}
+function tone(f,d=.15,ty='square',v=.06,w=0,f2){const A=ac();if(!A||!sndOn)return;const t=A.currentTime+w,o=A.createOscillator(),n=A.createGain();o.type=ty;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);n.gain.setValueAtTime(v,t);n.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(n);n.connect(A.destination);o.start(t);o.stop(t+d)}
+const seq=(a,d,ty,v,gap)=>a.forEach((f,i)=>tone(f,d,ty,v,i*gap));
+const SFX={step:()=>tone(420,.06,'triangle',.05),ok:()=>seq([523,659,784,1047],.14,'square',.06,.07),bad:()=>tone(220,.35,'sawtooth',.07,0,90),hit:()=>{tone(150,.25,'sawtooth',.09,0,40);tone(90,.3,'square',.07)},go:()=>seq([392,523,659],.12,'square',.06,.1),win:()=>seq([523,659,784,659,784,1047],.18,'square',.06,.12),lose:()=>seq([392,330,262,196],.25,'triangle',.08,.2)};
+const MEL=[262,0,330,392,0,330,294,0,349,440,0,349,330,392,330,262];
+/* effects */
+function burst(x,y,c,n){for(let i=0;i<n;i++){const a=Math.random()*6.28,v=80+Math.random()*180;P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v-120,g:520,l:.6+Math.random()*.5,c:c||['#ffc93c','#ff6fa5','#3fa9f5','#3ed6a5'][i%4]})}}
+/* high score */
+const cmp=(a,b)=>b.sc-a.sc||a.t-b.t;
+function saveHS(l,sc,t){const all=LS.get('trig_hs',{}),a=all[l]||[],b=a.filter(x=>x.u==U).sort(cmp)[0],nw=sc>0&&(!b||cmp({sc,t},b)<0);a.push({u:U,sc,t:+t.toFixed(1)});a.sort(cmp);all[l]=a.slice(0,50);LS.set('trig_hs',all);return nw}
+function showHS(){const seen={},top=[];(LS.get('trig_hs',{})[lvl]||[]).forEach(x=>{if(!seen[x.u]){seen[x.u]=1;top.push(x)}});const me=top.find(x=>x.u==U);
+  $('hsb').innerHTML=`🏆 <b>ระดับ${LV[lvl].n}</b> · คะแนนสูงสุดของฉัน: ${me?`<b>${me.sc}</b> คะแนน (เวลา ${fmt(me.t)})`:'ยังไม่มี ลองเล่นดูนะ'}<br><small>อันดับในเครื่องนี้: ${top.slice(0,5).map((x,k)=>`${['🥇','🥈','🥉','4.','5.'][k]} ${esc(x.u)} ${x.sc} (${fmt(x.t)})`).join(' · ')||'—'}</small>`}
+/* questions */
+function mkPool(l){
+  const p=[],E=['0','1/2','√2/2','√3/2','1'],AN=['30°','45°','60°','90°','0°'],
+  tr=(ns,d)=>ns.forEach(n=>{const T={sin:sinT,cos:cosT,tan:tanT}[n];angs.forEach((a,i)=>p.push({q:`${n} ${a}° = ?`,a:T[i],d}))}),
+  add=(...x)=>x.forEach(([q,a,d])=>p.push({q,a,d}));
+  if(l=='e'){tr(['sin','cos'],E);add(['sin θ = ตรงข้าม ÷ ?','ฉาก',['ชิดมุม','ตรงข้าม']],['cos θ = ชิดมุม ÷ ?','ฉาก',['ตรงข้าม','ชิดมุม']],['tan θ = ตรงข้าม ÷ ?','ชิดมุม',['ฉาก','ตรงข้าม']],['ด้านที่ยาวที่สุดในสามเหลี่ยมมุมฉาก','ฉาก',['ชิดมุม','ตรงข้าม']],['นิ้วโป้ง = มุม ?','0°',AN],['นิ้วชี้ = มุม ?','30°',AN],['นิ้วกลาง = มุม ?','45°',AN],['นิ้วนาง = มุม ?','60°',AN],['นิ้วก้อย = มุม ?','90°',AN],['tan 45° = ?','1',E],['tan 0° = ?','0',E],['ตรงข้าม 3 ฉาก 6 → θ = ?','30°',AN])}
+  else if(l=='m'){tr(['sin','cos','tan'],VAL);add(['ตรงข้าม 3 ฉาก 6 → θ = ?','30°',AN],['ตรงข้าม = ชิดมุม → θ = ?','45°',AN],['ตรงข้าม 5 ฉาก 10 → θ = ?','30°',AN],['ชิดมุม 5 ฉาก 10 → θ = ?','60°',AN],['ตรงข้าม 7 ชิดมุม 7 → θ = ?','45°',AN],['ห่างตึก 20 ม. มุมเงย 45° → สูง = ?','20 ม.',['10 ม.','40 ม.','35 ม.','5 ม.']],['บันได 10 ม. ทำมุม 30° กับพื้น สูงจากพื้น = ?','5 ม.',['10 ม.','8.65 ม.','20 ม.','15 ม.']])}
+  else add(['sin 30° + cos 60° = ?','1',['1/2','√3','√3/2','0']],['sin 60° × cos 30° = ?','3/4',['√3/4','1/2','1','3/2']],['sin 45° × cos 45° = ?','1/2',['√2/2','1','1/4','√2/4']],['tan 60° × tan 30° = ?','1',['√3','3','1/3','0']],['sin²30° + cos²30° = ?','1',['1/2','3/4','√3/2','2']],['cos 60° ÷ sin 60° = ?','√3/3',['√3','1','1/2','√3/2']],['tan 45° + sin 90° = ?','2',['1','3','√2','0']],['sin 90° − cos 60° = ?','1/2',['1','0','√3/2','√3/3']],['2 cos 60° + tan 45° = ?','2',['1','3','3/2','√3']],['tan 30° × cos 30° = ?','1/2',['√3/2','1','√3/3','√3/6']],['cos 45° ÷ sin 45° = ?','1',['√2','0','1/2','√2/2']],
+    ['sin θ = √3/2 → θ = ?','60°',AN],['cos θ = 1/2 → θ = ?','60°',AN],['tan θ = √3 → θ = ?','60°',AN],['tan θ = √3/3 → θ = ?','30°',AN],['sin θ = √2/2 → θ = ?','45°',AN],['cos θ = √3/2 → θ = ?','30°',AN],
+    ['ตรงข้าม 4 ชิดมุม 4 → θ = ?','45°',AN],['ตรงข้าม 5√3 ฉาก 10 → θ = ?','60°',AN],['ตรงข้าม 6 ชิดมุม 6√3 → θ = ?','30°',AN],
+    ['บันได 20 ม. ทำมุม 30° กับพื้น สูงจากพื้น = ?','10 ม.',['20 ม.','10√3 ม.','5 ม.','40 ม.']],['บันได 12 ม. ทำมุม 60° กับพื้น สูงจากพื้น = ?','6√3 ม.',['6 ม.','12 ม.','12√3 ม.','4√3 ม.']],['ห่างตึก 30 ม. มุมเงย 30° → ตึกสูง = ?','10√3 ม.',['30 ม.','15 ม.','30√3 ม.','10 ม.']],['ห่างตึก 10 ม. มุมเงย 60° → ตึกสูง = ?','10√3 ม.',['10 ม.','5√3 ม.','20 ม.','30 ม.']]);
+  return p.sort(()=>Math.random()-.5).slice(0,10);
+}
+const gqSet=(h,a)=>{$('gq').innerHTML=h;$('gq').classList.toggle('ask',!!a)};
+const CX=144;
+function nextQ(){
+  const q=g.pool[g.r],L=LV[g.l],o=[q.a,...q.d.filter(x=>x!=q.a).sort(()=>Math.random()-.5).slice(0,2)].sort(()=>Math.random()-.5);
+  g.cur={q:q.q,a:q.a,o};g.v=L.v0+L.dv*g.r;g.ph='run';g.pick=-1;g.rows=[];
+  const rw=z=>{const b=[0,0,0],n=Math.random()<.45?2:1;let c=0;while(c<n){const i=Math.random()*3|0;if(!b[i]){b[i]=1;c++}}return{z,b}};
+  g.rows.push(rw(-.1),rw(-.7),rw(-1.3));
+  gqSet(`🏃 ข้อ ${g.r+1}/10 · เลื่อนหลบก้อนม่วงก่อน แล้วจะได้หยุดตอบคำถาม!`);$('gbC').disabled=true;
+}
+function askQ(){g.ph='ask';g.tq=LV[g.l].tq;g.pick=-1;gqSet(`<small>ข้อ ${g.r+1}/10 · แตะการ์ดคำตอบ</small><br>${esc(g.cur.q)}`,true);$('gbC').disabled=false;tone(660,.12,'triangle',.07);tone(880,.15,'triangle',.07,.12)}
+function answer(l){
+  if(!g||g.over||g.ph!='ask')return;g.ph='res';g.rt=2.2;g.pick=l;if(l>=0)g.lane=l;
+  const ok=l>=0&&g.cur.o[l]==g.cur.a,px=230+(g.lane-1)*CX,py=285;$('gbC').disabled=true;
+  if(ok){g.sc+=10;say('✅ ถูกต้อง!');SFX.ok();burst(px,py,null,26);P.push({x:px,y:py-70,vx:0,vy:-70,g:0,l:1,c:'#1fa97a',t:'+10'})}
+  else{g.life--;g.flash=.6;g.sh=RM?0:.25;say(l<0?'⏰ หมดเวลา!':'❌ ยังไม่ถูก');SFX.bad()}
+  gqSet(`${ok?'✅ ถูกต้อง!':l<0?'⏰ หมดเวลา!':'❌ ยังไม่ถูก'}<br><small>คำตอบคือ</small> <b style="color:#7cf0b8">${esc(g.cur.a)}</b>`,true);
+}
+function endG(){g.over=true;const L=LV[g.l],nw=saveHS(g.l,g.sc,g.t);$('gbS').textContent='🔄 เล่นอีกครั้ง';$('gbC').disabled=true;
+  gqSet(`จบเกม (${L.n})! ได้ ${g.sc}/100 คะแนน · เวลา ${fmt(g.t)} ${nw?'🏅 สถิติใหม่! ':''}${g.sc>=90?'🏆 สุดยอด!':g.sc>=60?'🌟 เก่งมาก!':'💪 ลองอีกครั้งนะ'}`);
+  SFX[g.sc>=60?'win':'lose']();if(g.sc>=60)burst(230,160,null,50);
+  log('game_end',`ระดับ${L.n} ${g.sc}/100 คะแนน เวลา ${fmt(g.t)}${nw?' (สถิติใหม่)':''}`);showHS()}
+function startG(){ac();if(document.activeElement)document.activeElement.blur();const L=LV[lvl];g={l:lvl,pool:mkPool(lvl),r:0,life:L.life,sc:0,lane:1,pl:1,rows:[],t:0,d:0,over:false,flash:0,sh:0,msg:'',mt:0,v:L.v0,ph:'run',tq:0,rt:0,pick:-1};P=[];nextQ();$('gbS').textContent='🔄 เริ่มใหม่';SFX.go();log('game_start','ระดับ'+L.n)}
+function say(m){g.msg=m;g.mt=1.5}
+function stepG(dt){
+  P.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=p.g*dt;p.l-=dt});P=P.filter(p=>p.l>0);
+  if(!g)return;g.pl+=(g.lane-g.pl)*Math.min(1,dt*14);g.mt=Math.max(0,g.mt-dt);g.flash=Math.max(0,g.flash-dt);g.sh=Math.max(0,g.sh-dt);
+  if(g.over)return;g.t+=dt;
+  if(g.ph=='run'){
+    g.d+=g.v*dt;
+    g.rows.forEach(w=>{w.z+=g.v*dt;if(w.z<.9||w.d||g.over)return;w.d=1;
+      if(w.b[g.lane]){const px=230+(g.lane-1)*129.5;g.life--;g.flash=.6;g.sh=RM?0:.4;say('💥 ชนแล้ว!');SFX.hit();burst(px,285,'#9a7df5',18);if(g.life<=0)endG()}});
+    if(g.over)return;g.rows=g.rows.filter(w=>w.z<1.2);if(!g.rows.length)askQ();
+  }else if(g.ph=='ask'){g.tq-=dt;if(g.tq<=0)answer(-1)}
+  else if(g.ph=='res'){g.rt-=dt;if(g.rt<=0){g.r++;if(g.life<=0||g.r>=10)endG();else nextQ()}}
+}
+function obs(X,x,y,s){
+  const r=28*s;X.fillStyle='rgba(59,47,99,.25)';X.beginPath();X.ellipse(x,y+r*.9,r*.9,r*.25,0,0,7);X.fill();
+  [-1,1].forEach(t=>poly(X,[[x+t*r*.75,y-r*.55],[x+t*r*.4,y-r*1.25],[x+t*r*.1,y-r*.85]],'#6a4fd0','#3b2f63'));
+  X.lineWidth=Math.max(2,3*s);X.fillStyle='#9a7df5';X.beginPath();X.arc(x,y,r,0,7);X.fill();X.stroke();face(X,x,y,r*.7);
+}
+function hud(X,t,x,y,al){X.font='700 18px Mali,Sarabun,sans-serif';X.textAlign=al;X.lineWidth=5;X.strokeStyle='#fff';X.strokeText(t,x,y);X.fillStyle='#3b2f63';X.fillText(t,x,y)}
+function fitTxt(X,t,x,y,col,max,w){let s=max;X.font=`700 ${s}px Mali,Sarabun,sans-serif`;while(s>12&&X.measureText(t).width>w){s-=2;X.font=`700 ${s}px Mali,Sarabun,sans-serif`}txt(X,t,x,y,col,s)}
+function drawG(){
+  const X=G2,T=g?g.t:0,D=g?g.d:0,sp=z=>35+105*z,ry=z=>70+Math.pow(Math.max(z,0),1.6)*290,asking=g&&(g.ph=='ask'||g.ph=='res')&&!g.over;
+  X.save();if(g&&g.sh>0)X.translate((Math.random()-.5)*g.sh*24,(Math.random()-.5)*g.sh*24);X.lineJoin='round';X.lineCap='butt';
+  const sk=X.createLinearGradient(0,0,0,80);sk.addColorStop(0,'#5fc8ff');sk.addColorStop(1,'#fff3a8');X.fillStyle=sk;X.fillRect(0,0,460,380);
+  X.fillStyle='#ffd43b';X.beginPath();X.arc(400,36,22,0,7);X.fill();X.strokeStyle='#3b2f63';X.lineWidth=3;X.stroke();face(X,400,37,18);
+  X.font='34px serif';X.textAlign='center';X.fillText('☁️',70,48);X.fillText('☁️',250,34);
+  X.fillStyle='#7be07b';X.fillRect(0,70,460,310);
+  poly(X,[[230-1.5*sp(0),70],[230+1.5*sp(0),70],[230+1.5*sp(1.2),ry(1.2)],[230-1.5*sp(1.2),ry(1.2)]],'#8d7be8','#3b2f63');
+  X.strokeStyle='#fff';
+  [-.5,.5].forEach(b=>{for(let z=D%.12;z<1.15;z+=.12){X.lineWidth=1+5*z;X.beginPath();X.moveTo(230+b*sp(z),ry(z));X.lineTo(230+b*sp(z+.06),ry(z+.06));X.stroke()}});
+  if(g&&g.ph=='run')[...g.rows].sort((a,b)=>a.z-b.z).forEach(w=>{if(w.z<=0)return;const s=.2+.9*w.z,y=ry(w.z);w.b.forEach((f,l)=>{if(f)obs(X,230+(l-1)*sp(w.z),y-25*s,s)})});
+  if(asking){X.fillStyle='rgba(255,255,255,.35)';X.fillRect(0,60,460,320)}
+  const pl=g?g.pl:1,x=230+(pl-1)*(asking?CX:sp(.9)),by=ry(.9),
+    bob=g&&!g.over?(g.ph=='run'?Math.abs(Math.sin(T*11))*9:(g.ph=='res'&&g.pick>=0&&g.cur.o[g.pick]==g.cur.a?Math.abs(Math.sin(T*9))*16:0)):0;
+  if(!(g&&g.flash>0&&((g.flash*18)|0)%2)){
+    X.fillStyle='rgba(59,47,99,.3)';X.beginPath();X.ellipse(x,by+4,24,7,0,0,7);X.fill();X.lineWidth=3;X.strokeStyle='#3b2f63';
+    [-1,1].forEach(t=>{X.fillStyle='#ff9ec4';X.beginPath();X.ellipse(x+t*12,by-64-bob,7,16,t*.25,0,7);X.fill();X.stroke()});
+    X.fillStyle='#ffb3d1';X.beginPath();X.arc(x,by-28-bob,27,0,7);X.fill();X.stroke();face(X,x,by-27-bob,22);
+  }
+  if(asking){
+    g.cur.o.forEach((o,l)=>{const cx=230+(l-1)*CX,cy=120,w=132,h=106,sel=l==g.lane&&g.ph=='ask';let fill=GC2[l];
+      if(g.ph=='res')fill=o==g.cur.a?'#7cf0b8':l==g.pick?'#ff9db6':'#e6e0f5';
+      X.fillStyle='rgba(59,47,99,.35)';X.beginPath();rr(X,cx-w/2+4,cy+6,w,h,16);X.fill();
+      X.fillStyle=fill;X.beginPath();rr(X,cx-w/2,cy,w,h,16);X.fill();X.strokeStyle=sel?'#ff2f78':'#3b2f63';X.lineWidth=sel?7:3;X.stroke();
+      txt(X,'กขค'[l],cx-w/2+16,cy+22,'#3b2f63',16);
+      fitTxt(X,o,cx,cy+h/2+11,'#3b2f63',36,w-18);
+      if(sel){X.fillStyle='#ff2f78';poly(X,[[cx-12,cy+h+8],[cx+12,cy+h+8],[cx,cy+h+24]],'#ff2f78')}
+      if(g.ph=='res'&&o==g.cur.a)txt(X,'✅',cx+w/2-12,cy+h-8,'#1fa97a',22)});
+  }
+  P.forEach(p=>{X.globalAlpha=Math.min(1,p.l*2);if(p.t)txt(X,p.t,p.x,p.y,p.c,26);else{X.fillStyle=p.c;X.fillRect(p.x-4,p.y-4,8,8)}});X.globalAlpha=1;
+  if(g&&g.flash>0){X.fillStyle=`rgba(255,60,100,${g.flash*.5})`;X.fillRect(0,0,460,380)}
+  if(g){hud(X,'❤️'.repeat(Math.max(0,g.life)),10,26,'left');hud(X,`⭐ ${g.sc}`,450,26,'right');hud(X,`ด่าน ${Math.min(g.r+1,10)}/10`,230,26,'center');
+    if(g.ph=='ask'&&!g.over){const tot=LV[g.l].tq,f=Math.max(0,g.tq/tot);X.fillStyle='#fff';X.strokeStyle='#3b2f63';X.lineWidth=3;X.beginPath();rr(X,70,36,320,22,11);X.fill();X.stroke();
+      X.fillStyle=f>.5?'#3ed6a5':f>.25?'#ffc93c':'#ff4d7d';X.beginPath();rr(X,73,39,Math.max(0,314*f),16,8);X.fill();txt(X,'⏳ '+Math.ceil(g.tq)+' วิ',230,53,'#3b2f63',15)}
+    else hud(X,'⏱ '+fmt(g.t),230,48,'center');
+    if(g.mt>0){X.fillStyle='rgba(255,255,255,.95)';X.strokeStyle='#3b2f63';X.lineWidth=3;X.beginPath();rr(X,110,66,240,40,16);X.fill();X.stroke();txt(X,g.msg,230,94,'#3b2f63',20)}}
+  if(!g||g.over){X.fillStyle='rgba(59,47,99,.62)';X.fillRect(0,0,460,380);
+    txt(X,g?`จบเกม! ${g.sc}/100 คะแนน`:'พร้อมวิ่งหรือยัง? 🏃',230,170,'#fff',28);txt(X,'กดปุ่ม “'+(g?'เล่นอีกครั้ง':'เริ่มเกม')+'” ด้านล่าง',230,210,'#ffe48a',18)}
+  X.restore();
+}
+function loop(t){const dt=Math.min(.05,(t-lt)/1000||0);lt=t;if(pg==3){stepG(dt);drawG();$('gbX').disabled=!(g&&!g.over)}requestAnimationFrame(loop)}
+function setLane(l){if(g&&!g.over&&g.lane!=l){g.lane=l;SFX.step()}}
+const mv=d=>{if(g&&!g.over)setLane(Math.max(0,Math.min(2,g.lane+d)))};
+$('gbL').onclick=()=>mv(-1);$('gbR').onclick=()=>mv(1);$('gbS').onclick=startG;$('gbX').onclick=stopG;$('gbC').onclick=()=>{if(g&&g.ph=='ask')answer(g.lane)};
+document.addEventListener('keydown',e=>{if(!g||g.over||pg!=3||e.target.tagName=='INPUT')return;const k=e.key;
+  if(k=='ArrowLeft'||k=='a'||k=='A'){mv(-1);e.preventDefault()}else if(k=='ArrowRight'||k=='d'||k=='D'){mv(1);e.preventDefault()}
+  else if(g.ph=='ask'&&(k=='Enter'||k==' ')){answer(g.lane);e.preventDefault()}
+  else if(g.ph=='ask'&&(k=='1'||k=='2'||k=='3')){answer(+k-1);e.preventDefault()}});
+/* finger / mouse: tap or drag across the screen to move */
+let drag=false;const gcv=$('gm'),laneAt=e=>{const r=gcv.getBoundingClientRect();return Math.max(0,Math.min(2,Math.floor((e.clientX-r.left)/r.width*3)))},yAt=e=>{const r=gcv.getBoundingClientRect();return(e.clientY-r.top)/r.height*380};
+gcv.addEventListener('pointerdown',e=>{if(!g||g.over)return;drag=true;try{gcv.setPointerCapture(e.pointerId)}catch(_){}
+  const l=laneAt(e),y=yAt(e);if(g.ph=='ask'&&y>110&&y<250&&g.lane==l)answer(l);else setLane(l);e.preventDefault()});
+gcv.addEventListener('pointermove',e=>{if(drag&&g&&!g.over)setLane(laneAt(e))});
+['pointerup','pointercancel','lostpointercapture'].forEach(n=>gcv.addEventListener(n,()=>drag=false));
+document.querySelectorAll('.lvb').forEach(b=>b.onclick=()=>{lvl=b.dataset.l;document.querySelectorAll('.lvb').forEach(x=>{x.classList.toggle('on',x==b);x.setAttribute('aria-pressed',x==b)});g=null;$('gbC').disabled=true;$('gbS').textContent='▶ เริ่มเกม';gqSet(`ระดับ${LV[lvl].n} · กด “เริ่มเกม” แล้ววิ่งหลบ จากนั้นหยุดตอบคำถาม!`);showHS()});
+$('snd').onclick=()=>{sndOn=!sndOn;$('snd').textContent=sndOn?'🔊 เสียง':'🔇 เสียง';$('snd').setAttribute('aria-pressed',sndOn)};
+$('bgm').onclick=()=>{bgmOn=!bgmOn;$('bgm').setAttribute('aria-pressed',bgmOn);$('bgm').textContent=bgmOn?'🎵 เพลง: เปิด':'🎵 เพลง';clearInterval(bgmT);if(bgmOn){ac();bgmT=setInterval(()=>{const n=MEL[bi++%MEL.length];if(n)tone(n,.22,'triangle',.035)},280)}};
+requestAnimationFrame(loop);
+
+/* ---------- 5. Quiz ---------- */
+const Q=[
+{q:'ในสามเหลี่ยมมุมฉาก sin θ เท่ากับข้อใด',o:['ชิดมุม/ฉาก','ตรงข้าม/ฉาก','ตรงข้าม/ชิดมุม','ฉาก/ตรงข้าม'],a:1,e:'sin = ด้านตรงข้ามมุม ÷ ด้านฉาก'},
+{q:'ใช้กฎมือซ้ายหาค่า sin 30°',o:['√3/2','1','1/2','√2/2'],a:2,e:'นิ้วชี้ (30°) มีนิ้วทางขวา (ฝั่งนิ้วโป้ง) 1 นิ้ว → sin = √1/2 = 1/2'},
+{q:'cos 60° มีค่าเท่าใด',o:['√3/2','1/2','0','1'],a:1,e:'นิ้วนาง (60°) มีนิ้วทางซ้าย (ฝั่งนิ้วก้อย) 1 นิ้ว → cos = √1/2 = 1/2'},
+{q:'tan 45° มีค่าเท่าใด',o:['0','√3','1','1/2'],a:2,e:'sin 45° = cos 45° = √2/2 จึงหารกันได้ 1'},
+{q:'sin 60° มีค่าเท่าใด',o:['1/2','√3/2','√2/2','1'],a:1,e:'นิ้วนาง (60°) มีนิ้วทางขวา 3 นิ้ว → sin = √3/2'},
+{q:'cos 90° มีค่าเท่าใด',o:['1','1/2','√3/2','0'],a:3,e:'นิ้วก้อย (90°) ไม่มีนิ้วทางซ้าย → cos = √0/2 = 0'},
+{q:'สามเหลี่ยมมุมฉากมีด้านตรงข้ามมุม θ ยาว 3 และด้านฉากยาว 6 มุม θ เท่ากับกี่องศา',o:['60°','45°','30°','90°'],a:2,e:'sin θ = 3/6 = 1/2 ซึ่งตรงกับ sin 30°'},
+{q:'ด้านตรงข้ามมุม θ ยาวเท่ากับด้านชิดมุม θ มุม θ เท่ากับกี่องศา',o:['30°','60°','90°','45°'],a:3,e:'tan θ = ตรงข้าม/ชิดมุม = 1 ซึ่งตรงกับ tan 45°'},
+{q:'บันไดยาว 10 เมตร พิงกำแพงทำมุม 60° กับพื้น บันไดสูงจากพื้นประมาณกี่เมตร (√3 ≈ 1.73)',o:['5 เมตร','8.65 เมตร','10 เมตร','17.3 เมตร'],a:1,e:'สูง = 10 × sin 60° = 10 × √3/2 ≈ 8.65 เมตร'},
+{q:'เงาของเสาธงยาว 30 เมตร เมื่อมุมเงยของดวงอาทิตย์เป็น 30° เสาธงสูงประมาณกี่เมตร (√3 ≈ 1.73)',o:['15 เมตร','30 เมตร','17.3 เมตร','51.9 เมตร'],a:2,e:'สูง = 30 × tan 30° = 30 × √3/3 = 10√3 ≈ 17.3 เมตร'}
+];
+function build(){
+  $('quiz').innerHTML=Q.map((x,i)=>`<div class="q"><p>${i+1}. ${x.q}</p>${x.o.map((t,j)=>`<label><input type="radio" name="q${i}" value="${j}"> ${'กขคง'[j]}. ${t}</label>`).join('')}<div class="ex" id="ex${i}"></div></div>`).join('');
+  $('score').textContent='';
+}
+$('sub').onclick=()=>{
+  let sc=0;
+  Q.forEach((x,i)=>{
+    const L=document.querySelectorAll(`input[name=q${i}]`);let ans=-1;
+    L.forEach((r,j)=>{r.disabled=true;if(r.checked)ans=j;r.parentNode.classList.remove('ok','no')});
+    L[x.a].parentNode.classList.add('ok');
+    if(ans==x.a)sc++;else if(ans>=0)L[ans].parentNode.classList.add('no');
+    const ex=$('ex'+i);ex.style.display='block';ex.textContent=(ans==x.a?'🎉 ถูกต้อง! ':ans<0?'⚠️ ยังไม่ได้ตอบ · ':'❌ ยังไม่ถูก · ')+'เฉลย: '+'กขคง'[x.a]+' — '+x.e;
+  });
+  log('quiz','ได้ '+sc+'/10');$('score').innerHTML=`คะแนนของเธอ ${sc} / 10 ${sc==10?'🏆 เก่งที่สุดเลย!':sc>=7?'🌟 เยี่ยมมาก!':sc>=5?'👍 ดีแล้ว ลองทบทวนอีกนิด':'💪 สู้ ๆ ลองเล่นกฎมือซ้ายอีกรอบ'}`;
+};
+$('rst').onclick=build;
+build();upH();upT();upS();
+/* ---------- Ladder ---------- */
+const lcx=$('ld').getContext('2d');
+function upL(){
+  const L=+$('ll').value,a=+$('la').value,t=rad(a),h=L*Math.sin(t),f=L*Math.cos(t);$('lLL').textContent=L+' ม.';$('laL').textContent=a+'°';
+  const X=lcx,gy=232,wx=410,s=Math.min(190/h,300/Math.max(f,.5),26),fx=wx-f*s,ty=gy-h*s;X.clearRect(0,0,460,260);
+  X.fillStyle='#8be28b';X.fillRect(0,gy,460,28);X.fillStyle='#ffb3d1';X.fillRect(wx,10,50,gy-10);X.strokeStyle='#3b2f63';X.lineWidth=3;X.strokeRect(wx,10,50,gy-10);X.beginPath();X.moveTo(0,gy);X.lineTo(460,gy);X.stroke();
+  X.lineCap='round';X.strokeStyle='#3b2f63';X.lineWidth=11;X.beginPath();X.moveTo(fx,gy);X.lineTo(wx,ty);X.stroke();X.strokeStyle='#d98b00';X.lineWidth=6;X.beginPath();X.moveTo(fx,gy);X.lineTo(wx,ty);X.stroke();
+  X.strokeStyle='#3b2f63';X.lineWidth=3;for(let k=1;k<L*1.2;k++){const u=k/(L*1.2);const x=fx+(wx-fx)*u,y=gy+(ty-gy)*u;X.beginPath();X.moveTo(x-7*Math.sin(t),y-7*Math.cos(t));X.lineTo(x+7*Math.sin(t),y+7*Math.cos(t));X.stroke()}X.lineCap='butt';
+  face(X,fx+(wx-fx)*.5,gy+(ty-gy)*.5-18,13);
+  X.setLineDash([6,5]);X.strokeStyle='#e0407f';X.lineWidth=2.5;X.beginPath();X.moveTo(wx,ty);X.lineTo(wx,gy);X.stroke();X.setLineDash([]);
+  X.strokeStyle='#3b2f63';X.lineWidth=2;X.beginPath();X.arc(fx,gy,34,-t,0);X.stroke();
+  txt(X,'θ',fx+46,gy-8,'#6a4fd0',16);txt(X,'ห่างกำแพง '+f.toFixed(2)+' ม.',(fx+wx)/2,gy+22,'#1b86d6',14);
+  X.save();X.translate(wx-14,(gy+ty)/2);X.rotate(-Math.PI/2);txt(X,'สูง '+h.toFixed(2)+' ม.',0,0,'#e0407f',14);X.restore();
+  $('lres').innerHTML=`ความสูง = L × sin θ<br>= ${L} × sin ${a}° = ${L} × ${Math.sin(t).toFixed(3)}<br>บันไดแตะกำแพงสูง <span class="big">${h.toFixed(2)} ม.</span><br><b class="a">เท้าบันไดห่างกำแพง</b> = L × cos ${a}° = <b>${f.toFixed(2)} ม.</b>`;
+}
+$('ll').oninput=$('la').oninput=upL;upL();
+
+/* ---------- Pages ---------- */
+function showPage(n,sc){pg=n;document.querySelectorAll('.page').forEach(p=>p.classList.toggle('on',p.id=='pg'+n));
+  document.querySelectorAll('.tabb').forEach(b=>{const on=+b.dataset.p==n;b.classList.toggle('on',on);b.setAttribute('aria-current',on?'page':'false')});
+  try{history.replaceState(null,'','#p'+n)}catch(e){}
+  if(sc!==false)$('nav').scrollIntoView({behavior:'smooth',block:'start'})}
+document.querySelectorAll('.tabb,.go').forEach(b=>b.addEventListener('click',()=>showPage(+b.dataset.p)));
+$('lgb').onclick=()=>{showPage(4,false);setTimeout(()=>$('logsec').scrollIntoView({behavior:'smooth'}),50)};
+addEventListener('hashchange',()=>{if(/^#p[1-4]$/.test(location.hash))showPage(+location.hash[2])});
+if(/^#p[1-4]$/.test(location.hash))showPage(+location.hash[2],false);
+
+/* ---------- 6. MediaPipe Hand Landmarker ---------- */
+const MPV='https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14',HM='https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
+const cvEl=$('cv'),coEl=$('co'),cox=coEl.getContext('2d'),dist=(a,b)=>Math.hypot(a.x-b.x,a.y-b.y),hs2=m=>$('cs').textContent=m;
+const TIP=[20,16,12,8,4],PIP=[18,14,10,6,3],CONN=[[0,1],[1,2],[2,3],[3,4],[0,5],[5,6],[6,7],[7,8],[5,9],[9,10],[10,11],[11,12],[9,13],[13,14],[14,15],[15,16],[13,17],[17,18],[18,19],[19,20],[0,17]];
+let hFlip=false,hStep='',HL=null,hOn=false,hBusy=false,hStream=null,hLast=-1,hSx=.5,hStab=0,hPrev=-1,hPinch=0,hCool=0;
+const hint=()=>{hs2(pg==3?'🖐️ เลื่อนมือซ้าย-ขวา = เปลี่ยนเลน · 🤏 จีบโป้ง+ชี้ = ยืนยัน':pg==1?'🖐️ หันฝ่ามือซ้ายเข้าหาตัว แล้วพับ 1 นิ้ว (ตั้งมือ=sin/cos · นอนมือ=tan)':'🖐️ ไปหน้า 1 (ความรู้) หรือ 3 (เกม) เพื่อใช้มือ');if(pg==1)$('hmode').textContent='📷 ยังไม่เห็นมือ · ยกมือซ้ายให้กล้องเห็น หันฝ่ามือเข้าหาตัว แล้วพับนิ้ว 1 นิ้ว'};
+async function startHand(){
+  $('camBox').style.display='block';hs2('⏳ กำลังโหลดโมเดล MediaPipe…');
+  try{
+    if(!HL){hStep='โหลดไลบรารี MediaPipe';const {HandLandmarker:H,FilesetResolver:F}=await import(MPV+'/vision_bundle.mjs'),fs=await F.forVisionTasks(MPV+'/wasm'),
+      mk=d=>H.createFromOptions(fs,{baseOptions:{modelAssetPath:HM,delegate:d},runningMode:'VIDEO',numHands:1,minHandDetectionConfidence:.6,minTrackingConfidence:.5});
+      hStep='โหลดโมเดลมือ';HL=await mk('CPU')}
+    hStep='เปิดกล้อง';hStream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'user',width:320,height:240},audio:false});
+    cvEl.srcObject=hStream;await cvEl.play();hOn=true;$('hmode').style.display='block';$('hb').setAttribute('aria-pressed',true);$('hb').textContent='🖐️ ปิดกล้องมือ';log('hand','เปิดการควบคุมด้วยมือ');hint();requestAnimationFrame(hLoop);
+  }catch(e){stopHand(1);hs2('❌ '+hStep+'ไม่สำเร็จ: '+(e&&e.name?e.name+' – '+e.message:e)+(window.isSecureContext?'':' · ต้องเปิดผ่าน https หรือ localhost')+(top!==self?' · หน้านี้ถูกฝังในกรอบ ให้เปิดไฟล์ในแท็บใหม่':'')+' (แตะกล่องนี้เพื่อปิด)');console.error(e)}
+}
+function stopHand(k){hOn=false;$('hmode').style.display='none';if(hStream){hStream.getTracks().forEach(t=>t.stop());hStream=null}cvEl.srcObject=null;if(!k)$('camBox').style.display='none';$('hb').setAttribute('aria-pressed',false);$('hb').textContent='🖐️ ควบคุมด้วยมือ'}
+$('hf').onclick=e=>{e.stopPropagation();hFlip=!hFlip};
+$('camBox').onclick=()=>{if(!hOn)$('camBox').style.display='none'};
+$('hb').onclick=async()=>{if(hBusy)return;hBusy=true;try{hOn?stopHand():await startHand()}finally{hBusy=false}};
+function hLoop(){
+  if(!hOn)return;
+  if(cvEl.readyState>=2&&cvEl.currentTime!=hLast){hLast=cvEl.currentTime;
+    let L;try{L=HL.detectForVideo(cvEl,performance.now()).landmarks[0]}catch(e){hs2('❌ โมเดลทำงานผิดพลาด: '+e.message);console.error(e);return}
+    if(coEl.width!=cvEl.videoWidth){coEl.width=cvEl.videoWidth;coEl.height=cvEl.videoHeight}
+    cox.clearRect(0,0,coEl.width,coEl.height);
+    if(L){drawHand(L);useHand(L)}else{hStab=0;hPrev=-1;hPinch=0;hint()}}
+  requestAnimationFrame(hLoop)}
+function drawHand(L){const w=coEl.width,h=coEl.height;cox.lineWidth=3;cox.strokeStyle='#8b6cf0';cox.beginPath();CONN.forEach(([a,b])=>{cox.moveTo(L[a].x*w,L[a].y*h);cox.lineTo(L[b].x*w,L[b].y*h)});cox.stroke();cox.fillStyle='#ff6fa5';L.forEach(q=>{cox.beginPath();cox.arc(q.x*w,q.y*h,3,0,7);cox.fill()})}
+function useHand(L){
+  if(pg==1){
+    /* ฝ่ามือเข้าหาตัว (มือซ้าย): ผลคูณไขว้ของเวกเตอร์ข้อมือ→โคนชี้ กับ ข้อมือ→โคนก้อย เป็นลบ · มือตั้ง/นอน ดูจากทิศข้อมือ→โคนกลาง · นิ้วพับ = ปลายนิ้วไม่ไกลกว่าข้อ PIP */
+    const D=(a,b)=>Math.hypot((L[a].x-L[b].x)*4,(L[a].y-L[b].y)*3),V=i=>[(L[i].x-L[0].x)*4,(L[i].y-L[0].y)*3],a=V(5),b=V(17),
+      fc=(a[0]*b[1]-a[1]*b[0])/(Math.hypot(...a)*Math.hypot(...b))*(hFlip?-1:1),dx=Math.abs(V(9)[0]),dy=Math.abs(V(9)[1]),hz=dx>dy*1.2,vt=dy>dx*1.2,
+      fold=TIP.map((t,i)=>!(i<4?D(0,t)>D(0,PIP[i])*1.15:D(17,4)>D(17,3)*1.1)),nf=fold.filter(Boolean).length,k=fold.indexOf(true);
+    let msg='',lg='',ok=0;
+    if(fc>.25)msg='🔄 หันฝ่ามือเข้าหาตัว (ใช้มือซ้าย)';
+    else if(fc>-.25)msg='🖐️ กางมือให้เห็นหลังมือชัด ๆ';
+    else if(!hz&&!vt)msg='↕️ ตั้งมือตรง หรือ ↔️ วางมือนอน';
+    else if(nf!=1)msg=nf?'☝️ พับแค่นิ้วเดียวนะ':'🖐️ กางมือ แล้วพับนิ้วที่ต้องการ';
+    else{ok=1;const key=k+(hz?'t':'s');if(key==hPrev)hStab++;else{hPrev=key;hStab=1}
+      msg=(hz?'↔️ tan · ':'↕️ sin/cos · ')+'พับนิ้ว'+fing[k].n+' = '+angs[k]+'°';
+      lg=hz?`↔️ <b>ฝ่ามือเข้าหาตัว · มือนอน</b> พับ<b>นิ้ว${fing[k].n}</b> = ${angs[k]}°<br><span class="tag" style="background:#8b6cf0">tan</span> tan ${angs[k]}° = sin ÷ cos = ${sinT[k]} ÷ ${cosT[k]} = <b>${tanT[k]}</b>`
+        :`↕️ <b>ฝ่ามือเข้าหาตัว · มือตั้ง</b> พับ<b>นิ้ว${fing[k].n}</b> = ${angs[k]}°<br><span class="tag" style="background:#3fa9f5">sin</span> นิ้วฝั่งโป้ง ${4-k} นิ้ว → sin ${angs[k]}° = √${4-k}/2 = <b>${sinT[k]}</b><br><span class="tag" style="background:#ff6fa5">cos</span> นิ้วฝั่งก้อย ${k} นิ้ว → cos ${angs[k]}° = √${k}/2 = <b>${cosT[k]}</b>`;
+      if(hStab==6)pick(k)}
+    if(!ok){hPrev=-1;hStab=0}
+    hs2(msg);$('hmode').innerHTML=lg||'📷 '+msg;
+  }else if(pg==3&&g&&!g.over){
+    const pr=dist(L[4],L[8])/dist(L[0],L[9]);hSx=hSx*.6+(1-L[9].x)*.4; /* 1-x เพราะภาพกล้องกลับด้าน */
+    if(pr>.5)setLane(hSx<.36?0:hSx>.64?2:1);
+    if(pr<.3){hPinch++;if(hPinch==4&&g.ph=='ask'&&performance.now()>hCool){hCool=performance.now()+1200;answer(g.lane)}}else hPinch=0;
+    hs2(g.ph=='ask'?'🤏 จีบโป้ง+ชี้ = ยืนยันการ์ด '+'กขค'[g.lane]:'🖐️ เลื่อนมือซ้าย-ขวาเพื่อหลบ')
+  }else hint()
+}
+
+function stopG(){if(!g||g.over)return;const L=LV[g.l];log('game_end',`ระดับ${L.n} หยุดเกมกลางคัน ที่ด่าน ${Math.min(g.r+1,10)}/10 · ${g.sc} คะแนน (ไม่บันทึกสถิติ)`);g=null;P=[];$('gbS').textContent='▶ เริ่มเกม';$('gbC').disabled=true;SFX.step();gqSet('⏹ หยุดเกมแล้ว · กด “เริ่มเกม” เพื่อเล่นใหม่')}
+if(U&&LS.get('trig_users',{})[U])enter(U);else{U=null;$('au').focus()}
+</script>
+</body>
+</html>
